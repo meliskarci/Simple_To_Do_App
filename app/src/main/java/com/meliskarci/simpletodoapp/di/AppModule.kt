@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.meliskarci.simpletodoapp.data.local.ToDoDatabase
 import com.meliskarci.simpletodoapp.data.local.TodoDao
+import com.meliskarci.simpletodoapp.domain.repository.ToDoDaoRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,18 +24,18 @@ object AppModule {
             appContext,
             ToDoDatabase::class.java,
             "tododb"
-        ).build()
+        ).build() //veri tabanını provide ettik. room u di içerisinde tanımladık
     }
 
     @Provides
     @Singleton
     fun provideTodoDao(database: ToDoDatabase) : TodoDao {
         return database.todoDao()
-    }
+    }  //daoyu  provide ettik
 
     @Provides
     @Singleton
-    fun provideTodoDaoRepositoryImpl(todoDao: TodoDao) : TodoDaoRepositoryImpl {
-        return TodoDaoRepositoryImpl(todoDao)
+    fun provideToDoDaoRepository(todoDao: TodoDao) : ToDoDaoRepositoryImpl {
+        return ToDoDaoRepositoryImpl(todoDao)  ////impl yi provide ettik
     }
 }
