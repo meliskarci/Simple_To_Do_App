@@ -1,10 +1,9 @@
-package com.meliskarci.simpletodoapp.presentation
+package com.meliskarci.simpletodoapp.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.meliskarci.simpletodoapp.data.local.TodoEntity
-import com.meliskarci.simpletodoapp.domain.repository.ToDoDaoRepositoryImpl
+import com.meliskarci.simpletodoapp.domain.repository.usecase.getTodosUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val repository: ToDoDaoRepositoryImpl
+    private val getTodosUseCase: getTodosUseCase
 ) : ViewModel() {
 
     private val _list = MutableStateFlow<List<TodoEntity>>(emptyList())
@@ -26,10 +25,9 @@ class HomeScreenViewModel @Inject constructor(
         getAllTodos()
     }
 
-
-    fun getAllTodos(){
+    fun getAllTodos() {
         viewModelScope.launch {
-            repository.getTodos().collect{ todoList ->
+            getTodosUseCase.invoke().collect { todoList ->
                 _list.value = todoList
             }
         }
