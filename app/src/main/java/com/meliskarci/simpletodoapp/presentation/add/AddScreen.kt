@@ -1,4 +1,4 @@
-package com.meliskarci.simpletodoapp.presentation
+package com.meliskarci.simpletodoapp.presentation.add
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

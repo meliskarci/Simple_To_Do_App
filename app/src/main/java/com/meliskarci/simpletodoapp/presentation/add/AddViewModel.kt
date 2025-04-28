@@ -1,22 +1,22 @@
-package com.meliskarci.simpletodoapp.presentation
+package com.meliskarci.simpletodoapp.presentation.add
 
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.meliskarci.simpletodoapp.data.local.TodoEntity
 import com.meliskarci.simpletodoapp.domain.repository.ToDoDaoRepositoryImpl
+import com.meliskarci.simpletodoapp.domain.repository.usecase.InsertTodoUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddViewModel @Inject constructor(
-    private val repository: ToDoDaoRepositoryImpl
+    private val InsertTodoUsecase: InsertTodoUsecase
 ) : ViewModel() {
 
     fun insertTodo(todo: TodoEntity) {
         viewModelScope.launch {
-            repository.insertTodo(todo)
+            InsertTodoUsecase(todo)
         }
     }
 }
