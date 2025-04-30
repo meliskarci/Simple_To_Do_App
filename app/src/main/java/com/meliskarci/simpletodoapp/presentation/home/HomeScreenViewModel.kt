@@ -10,10 +10,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.meliskarci.simpletodoapp.domain.repository.usecase.DeleteTodoUsecase
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val getTodosUseCase: getTodosUseCase
+    private val getTodosUseCase: getTodosUseCase,
+    private val deleteTodoUsecase: DeleteTodoUsecase
 ) : ViewModel() {
 
     private val _list = MutableStateFlow<List<TodoEntity>>(emptyList())
@@ -32,6 +34,14 @@ class HomeScreenViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteTodo(id: Int) {
+        viewModelScope.launch {
+            deleteTodoUsecase(id)
+        }
+    }
+
+
 }
 
 //usecase doldurduktan sonra getalltodosusecase çağır repository yerine

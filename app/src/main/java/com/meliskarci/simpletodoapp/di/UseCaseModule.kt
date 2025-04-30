@@ -1,6 +1,7 @@
 package com.meliskarci.simpletodoapp.di
 
 import com.meliskarci.simpletodoapp.domain.repository.ToDoDaoRepositoryImpl
+import com.meliskarci.simpletodoapp.domain.repository.usecase.DeleteTodoUsecase
 import com.meliskarci.simpletodoapp.domain.repository.usecase.InsertTodoUsecase
 import com.meliskarci.simpletodoapp.domain.repository.usecase.getTodosUseCase
 import dagger.Module
@@ -24,5 +25,18 @@ object UseCaseModule {
     fun provideInsertTodoUseCase(repository: ToDoDaoRepositoryImpl): InsertTodoUsecase {
         return InsertTodoUsecase(repository)
     }
+
+    @Provides
+    @Singleton
+    fun provideDeleteTodoUseCase(repository: ToDoDaoRepositoryImpl): DeleteTodoUsecase {
+        return DeleteTodoUsecase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetTodoByIdUseCase(repository: ToDoDaoRepositoryImpl): GetTodoByIdUsecase {
+        return GetTodoByIdUsecase(repository)
+    }
+
 
 }

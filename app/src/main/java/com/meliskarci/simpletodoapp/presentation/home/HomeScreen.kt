@@ -104,7 +104,7 @@ fun HomeScreen(navController: NavController) {
                     {
                         IconButton(
                             onClick = {
-
+                                viewModel.deleteTodo(todoList.value[it].id)
                             },modifier = Modifier.align(Alignment.End)
 
                         ) { Icon(imageVector = Icons.Default.Delete,
