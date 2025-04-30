@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.meliskarci.simpletodoapp.data.local.TodoEntity
 import com.meliskarci.simpletodoapp.domain.repository.ToDoDaoRepositoryImpl
+import com.meliskarci.simpletodoapp.domain.repository.usecase.GetTodoByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val repository: ToDoDaoRepositoryImpl,
+    private val getTodoByIdUseCase: GetTodoByIdUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -28,9 +29,9 @@ class DetailViewModel @Inject constructor(
 
     private fun getById(id: Int) {
         viewModelScope.launch {
-            repository.getTodoById(id).collect { data ->
-                _todo.value = data
+            getTodoByIdUseCase.invoke(id).collect {
+                _todo.value = it
             }
-        }
+            }
     }
 }

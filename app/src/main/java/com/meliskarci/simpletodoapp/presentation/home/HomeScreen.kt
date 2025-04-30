@@ -125,7 +125,8 @@ fun HomeScreen(navController: NavController) {
                         //Spacer(modifier = Modifier.height(1.dp))
                         IconButton(
                             onClick = {
-                                navController.navigate(Screen.Detail(todoList.value[it].id))
+                                navController.navigate(Screen.Add)
+                                viewModel.updateTodo(todoList.value[it].id, todoList.value[it].title, todoList.value[it].description)
                             },modifier = Modifier.align(Alignment.End)
 
                         ) { Icon(imageVector = Icons.Default.Edit,

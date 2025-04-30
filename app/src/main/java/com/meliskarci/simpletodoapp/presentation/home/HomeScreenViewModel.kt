@@ -11,11 +11,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.meliskarci.simpletodoapp.domain.repository.usecase.DeleteTodoUsecase
+import com.meliskarci.simpletodoapp.domain.repository.usecase.UpdateTodoUseCase
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val getTodosUseCase: getTodosUseCase,
-    private val deleteTodoUsecase: DeleteTodoUsecase
+    private val deleteTodoUsecase: DeleteTodoUsecase,
+    private val updateTodoUseCase: UpdateTodoUseCase
 ) : ViewModel() {
 
     private val _list = MutableStateFlow<List<TodoEntity>>(emptyList())
@@ -38,6 +40,12 @@ class HomeScreenViewModel @Inject constructor(
     fun deleteTodo(id: Int) {
         viewModelScope.launch {
             deleteTodoUsecase(id)
+        }
+    }
+
+    fun updateTodo(id: Int, title: String, description: String) {
+        viewModelScope.launch {
+            updateTodoUseCase(id, title, description)
         }
     }
 
