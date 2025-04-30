@@ -1,4 +1,4 @@
-package com.meliskarci.simpletodoapp.presentation
+package com.meliskarci.simpletodoapp.presentation.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

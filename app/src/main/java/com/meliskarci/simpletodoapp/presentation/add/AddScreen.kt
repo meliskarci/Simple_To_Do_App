@@ -1,5 +1,6 @@
 package com.meliskarci.simpletodoapp.presentation.add
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.meliskarci.simpletodoapp.data.local.TodoEntity
+import com.meliskarci.simpletodoapp.ui.theme.ArkaPlan
 
 
 @Composable
@@ -27,7 +29,7 @@ fun AddScreen(navController: NavController) {
     val title = remember { mutableStateOf("") }
     val description = remember { mutableStateOf("") }
 
-    Column(modifier = Modifier.fillMaxSize(),
+    Column(modifier = Modifier.fillMaxSize().background(color = ArkaPlan),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
         TextField(
@@ -48,6 +50,7 @@ fun AddScreen(navController: NavController) {
             onClick = {
                 val todo = TodoEntity(title = title.value, description = description.value)
                 viewModel.insertTodo(todo)
+                navController.navigateUp()
             }
         ) {
             Text("Add")
@@ -57,7 +60,7 @@ fun AddScreen(navController: NavController) {
                 navController.navigateUp()
             }
         ){
-            Text("Geri Dön")
+            Text("Back")
         }
     }
 }

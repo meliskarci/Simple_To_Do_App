@@ -11,7 +11,7 @@ interface TodoDao {
     @Insert
     suspend fun insertTodo(todo: TodoEntity)
 
-    @Query("SELECT * FROM Todos")
+    @Query("SELECT * FROM Todos ORDER BY id DESC")
     fun getTodos() : Flow<List<TodoEntity>>
 
     @Query("DELETE FROM Todos WHERE id = :id")
