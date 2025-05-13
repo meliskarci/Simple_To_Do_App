@@ -14,4 +14,10 @@ sealed interface Screen {
 
     @Serializable
     data object Add : Screen
+
+    @Serializable
+    data class Update(
+        val id: Int
+    ) : Screen
+
 }

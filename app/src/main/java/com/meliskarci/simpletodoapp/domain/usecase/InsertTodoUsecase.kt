@@ -1,4 +1,4 @@
-package com.meliskarci.simpletodoapp.domain.repository.usecase
+package com.meliskarci.simpletodoapp.domain.usecase
 
 import com.meliskarci.simpletodoapp.data.local.TodoEntity
 import com.meliskarci.simpletodoapp.domain.repository.ToDoDaoRepositoryImpl

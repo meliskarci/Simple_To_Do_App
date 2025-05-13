@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -43,10 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.meliskarci.simpletodoapp.navigation.Screen
-import com.meliskarci.simpletodoapp.ui.theme.ArkaPlan
-import com.meliskarci.simpletodoapp.ui.theme.CardRenk1
-import com.meliskarci.simpletodoapp.ui.theme.GetPlayfairDisplay
-import com.meliskarci.simpletodoapp.ui.theme.YazıRengi
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,24 +59,25 @@ fun HomeScreen(navController: NavController) {
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
-                    Text("To Do List", color = YazıRengi, fontFamily = GetPlayfairDisplay(), fontSize = 25.sp, fontWeight = FontWeight.Bold)
+                    Text("To Do List" ,color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 25.sp, fontWeight = FontWeight.Bold)
 
 
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = ArkaPlan )
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.surface )
             )
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
                 navController.navigate(Screen.Add)
-            }) {
+            }, containerColor = MaterialTheme.colorScheme.secondary) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
         },
-        containerColor = ArkaPlan
+        containerColor = MaterialTheme.colorScheme.onSecondary
     ) { paddings ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize().background(color = ArkaPlan).padding(horizontal = 16.dp),
+            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp),
 
@@ -86,10 +86,10 @@ fun HomeScreen(navController: NavController) {
             items(todoList.value.size) {
                 ElevatedCard(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .shadow(15.dp)
+                        .fillMaxSize().background(MaterialTheme.colorScheme.primaryContainer)
+                        .shadow(15.dp).clip(shape = RoundedCornerShape(12.dp))
                         .clickable { navController.navigate(Screen.Detail(todoList.value[it].id)) },
-                    shape = RoundedCornerShape(12.dp)) {
+                    shape = RoundedCornerShape(12.dp),) {
 
 
 
@@ -97,7 +97,7 @@ fun HomeScreen(navController: NavController) {
 
                         Column(
                         modifier = Modifier
-                            .background(color = CardRenk1)
+                            .background(color = MaterialTheme.colorScheme.primaryContainer)
                             .fillMaxSize()
                             .padding(15.dp)
                     )
@@ -108,29 +108,27 @@ fun HomeScreen(navController: NavController) {
                             },modifier = Modifier.align(Alignment.End)
 
                         ) { Icon(imageVector = Icons.Default.Delete,
-                            contentDescription = "Edit", tint = YazıRengi)}
+                            contentDescription = "Edit", tint = MaterialTheme.colorScheme.onPrimaryContainer)}
                         //Spacer(modifier = Modifier.height(1.dp))
 
                         Text(text = todoList.value[it].title,
-                            color = YazıRengi,
-                            fontFamily = GetPlayfairDisplay(),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold)
 
                         Spacer(modifier = Modifier.height(8.dp))
 
-                        Text(text = todoList.value[it].description,
-                            color = YazıRengi,
-                            fontFamily = GetPlayfairDisplay())
+
+                        Text(text = todoList.value[it].description, color = MaterialTheme.colorScheme.onPrimaryContainer)
                         //Spacer(modifier = Modifier.height(1.dp))
                         IconButton(
                             onClick = {
-                                navController.navigate(Screen.Add)
+                                navController.navigate(Screen.Update)
                                 viewModel.updateTodo(todoList.value[it].id, todoList.value[it].title, todoList.value[it].description)
                             },modifier = Modifier.align(Alignment.End)
 
                         ) { Icon(imageVector = Icons.Default.Edit,
-                            contentDescription = "Edit", tint = YazıRengi)}
+                            contentDescription = "Edit", tint = MaterialTheme.colorScheme.onPrimaryContainer)}
                     }
 
 

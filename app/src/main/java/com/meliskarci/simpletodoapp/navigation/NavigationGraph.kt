@@ -10,6 +10,7 @@ import com.meliskarci.simpletodoapp.navigation.Screen.Home
 import com.meliskarci.simpletodoapp.presentation.add.AddScreen
 import com.meliskarci.simpletodoapp.presentation.detail.DetailScreen
 import com.meliskarci.simpletodoapp.presentation.home.HomeScreen
+import com.meliskarci.simpletodoapp.presentation.update.UpdateScreen
 
 @Composable
 fun NavigationGraph() {
@@ -28,5 +29,9 @@ fun NavigationGraph() {
         composable<Add> {
             AddScreen(navController)
         }
+        composable<Screen.Update> {
+            UpdateScreen(navController)
+        }
+
     }
 }

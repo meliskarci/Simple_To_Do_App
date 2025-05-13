@@ -33,5 +33,4 @@ class ToDoDaoRepositoryImpl @Inject constructor(
         todoDao.updateTodo(id, title, description)
     }
 
-
 }

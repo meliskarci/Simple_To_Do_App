@@ -17,7 +17,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,80 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.meliskarci.simpletodoapp.ui.theme.ArkaPlan
-import com.meliskarci.simpletodoapp.ui.theme.CardRenk1
-import com.meliskarci.simpletodoapp.ui.theme.CardRenk2
-import com.meliskarci.simpletodoapp.ui.theme.GetPlayfairDisplay
-import com.meliskarci.simpletodoapp.ui.theme.YazıRengi
 
-//@Composable
-//fun DetailScreen(navController: NavController) {
-//
-//    val viewModel = hiltViewModel<DetailViewModel>()
-//    val todo = viewModel.todo.collectAsStateWithLifecycle()
-//
-//    Column (modifier = Modifier
-//        .fillMaxSize()
-//        .background(color = ArkaPlan)
-//        .padding(16.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.spacedBy(16.dp)
-//    ) {
-//        Card(
-//            modifier = Modifier.fillMaxSize()
-//                .fillMaxWidth(0.9f)
-//                .heightIn(min = 200.dp, max = 400.dp),
-//            shape = RoundedCornerShape(12.dp)
-//
-//        ) {
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier.fillMaxWidth()
-//            ) {Column(modifier = Modifier
-//                .fillMaxSize()
-//                .background(color = CardRenk1)
-//                .padding(16.dp)
-//                .alpha(0.6f)
-//            ) {
-//                Text(
-//                    todo.value.title,
-//                    color = YazıRengi,
-//                    fontFamily = GetPlayfairDisplay(),
-//                    fontSize = 20.sp,
-//                    fontWeight = FontWeight.Bold
-//                )
-//
-//                Spacer(modifier = Modifier.height(8.dp))
-//
-//                Text(
-//                    todo.value.description,
-//                    color = YazıRengi,
-//                    fontFamily = GetPlayfairDisplay(),
-//                    fontSize = 20.sp,
-//                    fontWeight = FontWeight.Bold
-//                )
-//
-//                Spacer(modifier = Modifier.height(8.dp))
-//
-//
-//
-//                Switch(
-//                    checked = todo.value.isCompleted,
-//                    onCheckedChange = {
-//                    }
-//                )
-//            }
-//            }
-//        }
-//
-//        Spacer(modifier = Modifier.height(8.dp))
-//
-//        Button(onClick = { navController.navigateUp() }) { Text("Back")
-//        }
-//    }
-//
-//
-//}
 
 @Composable
 fun DetailScreen(navController: NavController) {
@@ -114,8 +43,8 @@ fun DetailScreen(navController: NavController) {
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .background(color = ArkaPlan),
+            .fillMaxSize().background(MaterialTheme.colorScheme.surface)
+        ,
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -127,14 +56,14 @@ fun DetailScreen(navController: NavController) {
         ) {
             Card(
                 modifier = Modifier
-                    .fillMaxWidth(0.85f).background(color = ArkaPlan)        // genişlik ekranın %85’i kadar
-                    .heightIn(min = 200.dp, max = 250.dp).alpha(0.7f), // yükseklik sınırlı
-                shape = RoundedCornerShape(12.dp)
+                    .fillMaxWidth(0.85f).background(MaterialTheme.colorScheme.secondaryContainer)        // genişlik ekranın %85’i kadar
+                    .heightIn(min = 200.dp, max = 250.dp), // yükseklik sınırlı
+                shape = RoundedCornerShape(20.dp)
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(color = ArkaPlan)
+                        .background(color = MaterialTheme.colorScheme.secondaryContainer)
                         .padding(16.dp)
 
                     //horizontalAlignment = Alignment.CenterHorizontally
@@ -148,14 +77,15 @@ fun DetailScreen(navController: NavController) {
                         Switch(
                             checked = todo.value.isCompleted,
                             onCheckedChange = {
+
                                 // viewModel.onCheckChanged(it)
+                                //rengi aktif tertiary pasif on tertiary
                             }
                         )
                     }
                     Text(
                         todo.value.title,
-                        color = YazıRengi,
-                        fontFamily = GetPlayfairDisplay(),
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -164,8 +94,8 @@ fun DetailScreen(navController: NavController) {
 
                     Text(
                         todo.value.description,
-                        color = YazıRengi,
-                        fontFamily = GetPlayfairDisplay(),
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
@@ -173,8 +103,9 @@ fun DetailScreen(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    Button(onClick = { navController.navigateUp() }) {
-                        Text("Back")
+                    Button(colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                        onClick = { navController.navigateUp() }) {
+                        Text("Back", color = MaterialTheme.colorScheme.onPrimary)
                     }
                 }
 

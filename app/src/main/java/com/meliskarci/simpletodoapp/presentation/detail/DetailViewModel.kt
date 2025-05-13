@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.meliskarci.simpletodoapp.data.local.TodoEntity
 import com.meliskarci.simpletodoapp.domain.repository.ToDoDaoRepositoryImpl
-import com.meliskarci.simpletodoapp.domain.repository.usecase.GetTodoByIdUseCase
+import com.meliskarci.simpletodoapp.domain.usecase.GetTodoByIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,8 +22,8 @@ class DetailViewModel @Inject constructor(
     val id = savedStateHandle.get<Int>("id") ?: 0
 
     private val _todo = MutableStateFlow<TodoEntity>(TodoEntity(title = "Boş veri", description = "Boş veri"))
-    val todo: MutableStateFlow<TodoEntity>
-        get() = _todo
+    val todo: StateFlow<TodoEntity>
+        get() = _todo.asStateFlow()
 
     init {
         getById(id)
@@ -29,9 +31,9 @@ class DetailViewModel @Inject constructor(
 
     private fun getById(id: Int) {
         viewModelScope.launch {
-            getTodoByIdUseCase.invoke(id).collect {
+            getTodoByIdUseCase(id).collect {
                 _todo.value = it
             }
-            }
+        }
     }
 }

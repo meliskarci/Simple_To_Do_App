@@ -1,11 +1,11 @@
 package com.meliskarci.simpletodoapp.di
 
 import com.meliskarci.simpletodoapp.domain.repository.ToDoDaoRepositoryImpl
-import com.meliskarci.simpletodoapp.domain.repository.usecase.DeleteTodoUsecase
-import com.meliskarci.simpletodoapp.domain.repository.usecase.InsertTodoUsecase
-import com.meliskarci.simpletodoapp.domain.repository.usecase.getTodosUseCase
-import com.meliskarci.simpletodoapp.domain.repository.usecase.GetTodoByIdUseCase
-import com.meliskarci.simpletodoapp.domain.repository.usecase.UpdateTodoUseCase
+import com.meliskarci.simpletodoapp.domain.usecase.DeleteTodoUsecase
+import com.meliskarci.simpletodoapp.domain.usecase.InsertTodoUsecase
+import com.meliskarci.simpletodoapp.domain.usecase.getTodosUseCase
+import com.meliskarci.simpletodoapp.domain.usecase.GetTodoByIdUseCase
+import com.meliskarci.simpletodoapp.domain.usecase.UpdateTodoUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
