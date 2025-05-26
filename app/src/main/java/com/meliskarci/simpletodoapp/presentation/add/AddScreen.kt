@@ -31,7 +31,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -52,6 +51,14 @@ import com.meliskarci.simpletodoapp.data.local.TodoEntity
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.ui.platform.LocalContext
+import android.app.DatePickerDialog
+import androidx.compose.ui.text.font.FontStyle
+import com.example.ui.theme.PlayfairDisplay
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,7 +71,25 @@ fun AddScreen(navController: NavController) {
     var description by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
 
-    // Form validation
+
+    var selectedDateText by remember { mutableStateOf("") }
+    var dueDateTimestamp by remember { mutableStateOf<Long?>(null) }
+
+    val context = LocalContext.current
+    val calendar = Calendar.getInstance()
+
+    val datePickerDialog = DatePickerDialog(
+        context,
+        { _, year, month, dayOfMonth ->
+            calendar.set(year, month, dayOfMonth, 0, 0, 0)
+            dueDateTimestamp = calendar.timeInMillis
+            selectedDateText = SimpleDateFormat("dd MMMM yyyy", Locale("en")).format(calendar.time)
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
+    )
+
     val isTitleValid = title.trim().isNotEmpty()
     val isFormValid = isTitleValid
 
@@ -82,7 +107,8 @@ fun AddScreen(navController: NavController) {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 },
@@ -102,7 +128,7 @@ fun AddScreen(navController: NavController) {
                 .imePadding(),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // Header section
+
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -113,12 +139,13 @@ fun AddScreen(navController: NavController) {
                 Text(
                     text = "Create a new task",
                     fontSize = 16.sp,
+                    fontFamily = PlayfairDisplay,
+                    fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     textAlign = TextAlign.Center
                 )
             }
 
-            // Form section
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -131,11 +158,12 @@ fun AddScreen(navController: NavController) {
                     modifier = Modifier.padding(20.dp),
                     verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
-                    // Title field
+
                     Column {
                         Text(
                             text = "Title",
                             fontSize = 14.sp,
+                            fontFamily = PlayfairDisplay,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(bottom = 4.dp)
@@ -148,12 +176,16 @@ fun AddScreen(navController: NavController) {
                             placeholder = {
                                 Text(
                                     text = "Enter task title",
+                                    fontFamily = PlayfairDisplay,
+                                    fontWeight = FontWeight.Normal,
                                     color = MaterialTheme.colorScheme.outline
                                 )
                             },
                             isError = title.isNotEmpty() && !isTitleValid,
                             supportingText = if (title.isNotEmpty() && !isTitleValid) {
-                                { Text("Title cannot be empty") }
+                                { Text("Title cannot be empty",
+                                    fontFamily = PlayfairDisplay,
+                                    fontWeight = FontWeight.Normal) }
                             } else null,
                             shape = RoundedCornerShape(12.dp),
                             colors = OutlinedTextFieldDefaults.colors(
@@ -164,11 +196,11 @@ fun AddScreen(navController: NavController) {
                         )
                     }
 
-                    // Description field
                     Column {
                         Text(
                             text = "Description",
                             fontSize = 14.sp,
+                            fontFamily = PlayfairDisplay,
                             fontWeight = FontWeight.Medium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(bottom = 4.dp)
@@ -183,6 +215,8 @@ fun AddScreen(navController: NavController) {
                             placeholder = {
                                 Text(
                                     text = "Add task description",
+                                    fontFamily = PlayfairDisplay,
+                                    fontWeight = FontWeight.Normal,
                                     color = MaterialTheme.colorScheme.outline
                                 )
                             },
@@ -194,23 +228,52 @@ fun AddScreen(navController: NavController) {
                             maxLines = 4
                         )
                     }
+
+                    Column {
+                        Text(
+                            text = "Due Date",
+                            fontSize = 14.sp,
+                            fontFamily = PlayfairDisplay,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(bottom = 4.dp)
+                        )
+
+                        OutlinedButton(
+                            onClick = {
+                                datePickerDialog.show()
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Text(
+                                text = if (selectedDateText.isEmpty()) "Select due date" else selectedDateText,
+                                fontFamily = PlayfairDisplay,
+                                fontWeight = FontWeight.Normal,
+                                color = if (selectedDateText.isEmpty())
+                                    MaterialTheme.colorScheme.outline
+                                else
+                                    MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+
                 }
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Action buttons
             Column(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Add button
                 Button(
                     onClick = {
                         if (isFormValid && !isLoading) {
                             isLoading = true
                             val todo = TodoEntity(
                                 title = title.trim(),
-                                description = description.trim()
+                                description = description.trim(),
+                                dueDate = dueDateTimestamp
                             )
                             viewModel.insertTodo(todo)
                             navController.navigateUp()
@@ -250,7 +313,8 @@ fun AddScreen(navController: NavController) {
                             Text(
                                 text = "Create Task",
                                 fontSize = 16.sp,
-                                fontWeight = FontWeight.SemiBold
+                                fontFamily = PlayfairDisplay,
+                                fontWeight = FontWeight.SemiBold,
                             )
                         }
                     }
@@ -284,6 +348,7 @@ fun AddScreen(navController: NavController) {
                         Text(
                             text = "Cancel",
                             fontSize = 16.sp,
+                            fontFamily = PlayfairDisplay,
                             fontWeight = FontWeight.Medium
                         )
                     }

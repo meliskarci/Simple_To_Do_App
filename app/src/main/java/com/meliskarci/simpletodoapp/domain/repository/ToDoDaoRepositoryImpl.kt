@@ -29,8 +29,8 @@ class ToDoDaoRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun updateTodo(id: Int, title: String, description: String) {
-        todoDao.updateTodo(id, title, description)
+    suspend fun updateTodo(id: Int, title: String, description: String, dueDate: Long?, isCompleted: Boolean) {
+        todoDao.updateTodo(id, title, description, dueDate, isCompleted)
     }
 
 }

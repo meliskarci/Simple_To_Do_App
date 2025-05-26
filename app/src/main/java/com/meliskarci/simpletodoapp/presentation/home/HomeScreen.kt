@@ -24,14 +24,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.AlertDialogDefaults.containerColor
-import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -43,20 +40,25 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.ui.theme.PlayfairDisplay
 import com.meliskarci.simpletodoapp.navigation.Screen
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+fun formatDate(timestamp: Long): String {
+    val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+    return sdf.format(Date(timestamp))
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,14 +68,25 @@ fun HomeScreen(navController: NavController) {
     val viewModel = hiltViewModel<HomeScreenViewModel>()
     val todoList = viewModel.list.collectAsStateWithLifecycle()
 
+    fun formatDate(timestamp: Long?): String {
+        return if (timestamp == null) {
+            "No date"
+        } else {
+            val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
+            sdf.format(Date(timestamp))
+        }
+    }
+
+
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text("To Do List",
-                        color = MaterialTheme.colorScheme.onSurface,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 24.sp,
+                        fontFamily = PlayfairDisplay,
                         fontWeight = FontWeight.SemiBold,
                         letterSpacing = 0.5.sp
                     )
@@ -117,7 +130,7 @@ fun HomeScreen(navController: NavController) {
                 ) {
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
-                        contentDescription = "null",
+                        contentDescription = "No Task",
                         modifier = Modifier.size(64.dp),
                         tint = MaterialTheme.colorScheme.outline
                     )
@@ -126,12 +139,15 @@ fun HomeScreen(navController: NavController) {
 
                     Text(text = "No Tasks Yet",
                         fontSize = 18.sp,
+                        fontFamily = PlayfairDisplay,
                         fontWeight = FontWeight.Medium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Text(text = "Tap the + button to add your first task",
                     fontSize = 14.sp,
+                        fontFamily = PlayfairDisplay,
+                        fontWeight = FontWeight.Normal,
                         color = MaterialTheme.colorScheme.outline,
                         textAlign = TextAlign.Center
                     )
@@ -156,10 +172,11 @@ fun HomeScreen(navController: NavController) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
-                            text = "Today's Tasks",
+                            text = "My to do list",
                             fontSize = 16.sp,
+                            fontFamily = PlayfairDisplay,
                             fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                         Surface(
                             shape = RoundedCornerShape(12.dp),
@@ -169,6 +186,7 @@ fun HomeScreen(navController: NavController) {
                                 text = "${todoList.value.size} tasks",
                                 modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
                                 fontSize = 12.sp,
+                                fontFamily = PlayfairDisplay,
                                 fontWeight = FontWeight.Medium,
                                 color = MaterialTheme.colorScheme.onSecondaryContainer
                             )
@@ -187,7 +205,7 @@ fun HomeScreen(navController: NavController) {
                             .clickable {
                                 navController.navigate(Screen.Detail(todo.id))
                             },
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(24.dp),
                         elevation = CardDefaults.elevatedCardElevation(
                             defaultElevation = 4.dp,
                             pressedElevation = 8.dp
@@ -211,12 +229,14 @@ fun HomeScreen(navController: NavController) {
                                 ) {
                                     Text(
                                         text = todo.title,
-                                        color = MaterialTheme.colorScheme.onSurface,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         fontSize = 18.sp,
+                                        fontFamily = PlayfairDisplay,
                                         fontWeight = FontWeight.SemiBold,
                                         lineHeight = 24.sp,
                                         maxLines = 2,
-                                        overflow = TextOverflow.Ellipsis
+                                        overflow = TextOverflow.Ellipsis,
+                                        textDecoration = if (todo.isCompleted) TextDecoration.LineThrough else TextDecoration.None
                                     )
 
                                     if (todo.description.isNotEmpty()) {
@@ -225,9 +245,12 @@ fun HomeScreen(navController: NavController) {
                                             text = todo.description,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                             fontSize = 14.sp,
+                                            fontFamily = PlayfairDisplay,
+                                            fontWeight = FontWeight.Normal,
                                             lineHeight = 20.sp,
                                             maxLines = 3,
-                                            overflow = TextOverflow.Ellipsis
+                                            overflow = TextOverflow.Ellipsis,
+                                            textDecoration = if (todo.isCompleted) TextDecoration.LineThrough else TextDecoration.None
                                         )
                                     }
                                 }
@@ -238,7 +261,6 @@ fun HomeScreen(navController: NavController) {
                                     IconButton(
                                         onClick = {
                                             navController.navigate(Screen.Update(todo.id))
-                                            viewModel.updateTodo(todo.id, todo.title, todo.description)
                                         },
                                         modifier = Modifier.size(36.dp)
                                     ) {
@@ -265,14 +287,12 @@ fun HomeScreen(navController: NavController) {
                                 }
                             }
 
-                            // Priority indicator (optional - you can add priority field to your todo model)
                             Spacer(modifier = Modifier.height(12.dp))
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                // Task status chip
                                 Surface(
                                     shape = RoundedCornerShape(8.dp),
                                     color = MaterialTheme.colorScheme.tertiaryContainer.copy(alpha = 0.7f)
@@ -291,18 +311,20 @@ fun HomeScreen(navController: NavController) {
                                         )
                                         Spacer(modifier = Modifier.width(6.dp))
                                         Text(
-                                            text = "Pending",
+                                            text = if(todo.isCompleted) "Completed" else "Pending",
                                             fontSize = 11.sp,
+                                            fontFamily = PlayfairDisplay,
                                             fontWeight = FontWeight.Medium,
                                             color = MaterialTheme.colorScheme.onTertiaryContainer
                                         )
                                     }
                                 }
 
-                                // Date or time (if you have it in your model)
                                 Text(
-                                    text = "Today",
+                                    text = formatDate(todo.dueDate),
                                     fontSize = 11.sp,
+                                    fontFamily = PlayfairDisplay,
+                                    fontWeight = FontWeight.Normal,
                                     color = MaterialTheme.colorScheme.outline
                                 )
                             }

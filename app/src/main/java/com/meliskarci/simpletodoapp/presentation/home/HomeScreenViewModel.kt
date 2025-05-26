@@ -43,13 +43,11 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    fun updateTodo(id: Int, title: String, description: String) {
+    fun updateTodo(id: Int, title: String, description: String, dueDate: Long, isCompleted: Boolean) {
         viewModelScope.launch {
-            updateTodoUseCase(id, title, description)
+            updateTodoUseCase(id, title, description, dueDate, isCompleted )
         }
     }
 
 
 }
-
-//usecase doldurduktan sonra getalltodosusecase çağır repository yerine

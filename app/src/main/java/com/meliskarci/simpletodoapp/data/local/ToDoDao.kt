@@ -20,7 +20,7 @@ interface TodoDao {
     @Query("SELECT *FROM Todos WHERE id = :id")
     fun getTodoById(id: Int): Flow<TodoEntity>
 
-    @Query("UPDATE Todos SET title = :title, description = :description WHERE id = :id")
-    suspend fun updateTodo(id: Int, title: String, description: String)
+    @Query("UPDATE Todos SET title = :title, description = :description, dueDate = :dueDate, isCompleted = :isCompleted WHERE id = :id")
+    suspend fun updateTodo(id: Int, title: String, description: String, dueDate: Long?, isCompleted: Boolean)
 
 }

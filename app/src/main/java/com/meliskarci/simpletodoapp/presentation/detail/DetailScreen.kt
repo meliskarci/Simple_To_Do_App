@@ -18,6 +18,8 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -30,7 +32,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -51,6 +52,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.ui.theme.PlayfairDisplay
 import com.meliskarci.simpletodoapp.navigation.Screen
 
 
@@ -71,18 +73,13 @@ fun DetailScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text(
-                        text = "",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                },
+                title = { Text(text = "",) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back"
+                            contentDescription = "Back",
+                            tint = MaterialTheme.colorScheme.primary
                         )
                     }
                 },
@@ -101,7 +98,7 @@ fun DetailScreen(navController: NavController) {
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            // Status indicator
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -112,7 +109,7 @@ fun DetailScreen(navController: NavController) {
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Icon(
-                        imageVector = if (isCompleted) Icons.Default.CheckCircle else Icons.Default.Face,
+                        imageVector = if (isCompleted) Icons.Default.CheckCircle else Icons.Default.Notifications,
                         contentDescription = null,
                         tint = if (isCompleted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                         modifier = Modifier.size(20.dp)
@@ -120,6 +117,7 @@ fun DetailScreen(navController: NavController) {
                     Text(
                         text = if (isCompleted) "Completed" else "Pending",
                         fontSize = 14.sp,
+                        fontFamily = PlayfairDisplay,
                         fontWeight = FontWeight.Medium,
                         color = if (isCompleted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -129,7 +127,7 @@ fun DetailScreen(navController: NavController) {
                     checked = isCompleted,
                     onCheckedChange = {
                         isCompleted = it
-                        // viewModel.updateTaskStatus(todo.value.id, it)
+                        viewModel.updateTaskStatus(todo.value.id, it)
                     },
                     colors = SwitchDefaults.colors(
                         checkedThumbColor = MaterialTheme.colorScheme.primary,
@@ -140,7 +138,6 @@ fun DetailScreen(navController: NavController) {
                 )
             }
 
-            // Main content card
             ElevatedCard(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(20.dp),
@@ -157,36 +154,47 @@ fun DetailScreen(navController: NavController) {
                         .padding(24.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Title section
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        Text(
-                            text = "Title",
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            letterSpacing = 0.4.sp
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowDown,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = "Title",
+                                fontSize = 15.sp,
+                                fontFamily = PlayfairDisplay,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                letterSpacing = 0.4.sp
+                            )
+                        }
 
-                        Text(
-                            text = todo.value.title,
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface,
-                            lineHeight = 32.sp,
-                            textDecoration = if (isCompleted) TextDecoration.LineThrough else TextDecoration.None
-                        )
-                    }
+                            Text(
+                                text = todo.value.title,
+                                fontSize = 18.sp,
+                                fontFamily = PlayfairDisplay,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                lineHeight = 32.sp,
+                                textDecoration = if (isCompleted) TextDecoration.LineThrough else TextDecoration.None
+                            )
+                        }
 
-                    // Divider
+
                     if (todo.value.description.isNotEmpty()) {
                         HorizontalDivider(
                             color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
                             thickness = 1.dp
                         )
 
-                        // Description section
                         Column(
                             verticalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
@@ -202,7 +210,8 @@ fun DetailScreen(navController: NavController) {
                                 )
                                 Text(
                                     text = "Description",
-                                    fontSize = 12.sp,
+                                    fontSize = 15.sp,
+                                    fontFamily = PlayfairDisplay,
                                     fontWeight = FontWeight.Medium,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     letterSpacing = 0.4.sp
@@ -212,6 +221,8 @@ fun DetailScreen(navController: NavController) {
                             Text(
                                 text = todo.value.description,
                                 fontSize = 16.sp,
+                                fontFamily = PlayfairDisplay,
+                                fontWeight = FontWeight.Normal,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 lineHeight = 24.sp,
                                 textDecoration = if (isCompleted) TextDecoration.LineThrough else TextDecoration.None
@@ -221,7 +232,6 @@ fun DetailScreen(navController: NavController) {
                 }
             }
 
-            // Task metadata (optional - you can add these fields to your model)
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 shape = RoundedCornerShape(16.dp),
@@ -234,8 +244,9 @@ fun DetailScreen(navController: NavController) {
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = "Task Information",
+                        text = "Due Date Information",
                         fontSize = 14.sp,
+                        fontFamily = PlayfairDisplay,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSecondaryContainer
                     )
@@ -249,55 +260,17 @@ fun DetailScreen(navController: NavController) {
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Face,
+                                imageVector = Icons.Default.Notifications,
                                 contentDescription = null,
                                 modifier = Modifier.size(16.dp),
                                 tint = MaterialTheme.colorScheme.onSecondaryContainer
                             )
                             Text(
-                                text = "Created",
-                                fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSecondaryContainer
-                            )
-                        }
-                        Text(
-                            text = "Today", // You can format actual date here
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
-                    }
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Face,
-                                contentDescription = null,
-                                modifier = Modifier.size(16.dp),
-                                tint = MaterialTheme.colorScheme.onSecondaryContainer
-                            )
-                            Text(
-                                text = "Priority",
-                                fontSize = 12.sp,
-                                color = MaterialTheme.colorScheme.onSecondaryContainer
-                            )
-                        }
-                        Surface(
-                            shape = RoundedCornerShape(8.dp),
-                            color = MaterialTheme.colorScheme.tertiaryContainer
-                        ) {
-                            Text(
-                                text = "Medium", // You can add priority to your model
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                                fontSize = 10.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = MaterialTheme.colorScheme.onTertiaryContainer
+                                text = "Date: ${formatDate(todo.value.dueDate)}",
+                                fontSize = 14.sp,
+                                fontFamily = PlayfairDisplay,
+                                fontWeight = FontWeight.Normal,
+                                color = MaterialTheme.colorScheme.outline
                             )
                         }
                     }
@@ -306,12 +279,10 @@ fun DetailScreen(navController: NavController) {
 
             Spacer(modifier = Modifier.weight(1f))
 
-            // Action buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Edit button
                 Button(
                     onClick = {
                         navController.navigate(Screen.Update(todo.value.id))
@@ -331,16 +302,15 @@ fun DetailScreen(navController: NavController) {
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Edit",
+                        fontFamily = PlayfairDisplay,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
 
-                // Delete button
                 OutlinedButton(
                     onClick = {
-                        // Show confirmation dialog then delete
-                        // viewModel.deleteTodo(todo.value.id)
-                        // navController.navigateUp()
+                        viewModel.deleteTodo(todo.value.id)
+                        navController.navigateUp()
                     },
                     modifier = Modifier.weight(1f).height(50.dp),
                     shape = RoundedCornerShape(16.dp),
@@ -357,10 +327,18 @@ fun DetailScreen(navController: NavController) {
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = "Delete",
+                        fontFamily = PlayfairDisplay,
                         fontWeight = FontWeight.SemiBold
                     )
                 }
             }
         }
     }
+}
+
+
+fun formatDate(date: Long?): String {
+    return date?.let {
+        java.text.SimpleDateFormat("dd MMM yyyy").format(it)
+    } ?: "No date"
 }

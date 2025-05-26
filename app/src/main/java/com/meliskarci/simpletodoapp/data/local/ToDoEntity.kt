@@ -3,7 +3,6 @@ package com.meliskarci.simpletodoapp.data.local
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.serialization.Serializable
 
 
 @Entity(tableName = "Todos")
@@ -16,5 +15,9 @@ data class TodoEntity(
     @ColumnInfo(name = "description")
     val description : String,
     @ColumnInfo(name = "isCompleted")
-    val isCompleted : Boolean = false
+    val isCompleted : Boolean = false,
+    @ColumnInfo(name = "dueDate")
+    val dueDate: Long? = null
+
 )
+
